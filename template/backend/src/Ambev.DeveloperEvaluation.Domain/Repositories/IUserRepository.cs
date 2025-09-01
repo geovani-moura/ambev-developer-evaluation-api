@@ -1,3 +1,4 @@
+using Ambev.DeveloperEvaluation.Common.Repositories;
 using Ambev.DeveloperEvaluation.Domain.Entities;
 
 namespace Ambev.DeveloperEvaluation.Domain.Repositories;
@@ -38,4 +39,14 @@ public interface IUserRepository
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>True if the user was deleted, false if not found</returns>
     Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default);
+
+    Task<User?> UpdateAsync(User user, CancellationToken cancellationToken = default);
+
+    Task<PagedResult<User>> ListAsync(
+        int page,
+        int size,
+        string? order,
+        CancellationToken cancellationToken = default);
+
+
 }

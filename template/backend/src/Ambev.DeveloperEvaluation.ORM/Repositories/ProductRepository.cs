@@ -29,9 +29,13 @@ public class ProductRepository : IProductRepository
 
     public async Task<Product> UpdateAsync(Product product, CancellationToken cancellationToken = default)
     {
-        _context.Products.Update(product);
+        var existing = await _context.Products.FirstOrDefaultAsync(p => p.Id == product.Id, cancellationToken);
+        if (existing == null) return null;
+
+        _context.Entry(existing).CurrentValues.SetValues(product);
         await _context.SaveChangesAsync(cancellationToken);
-        return product;
+
+        return existing;
     }
 
     public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default)

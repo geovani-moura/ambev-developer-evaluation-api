@@ -21,8 +21,30 @@ using Microsoft.AspNetCore.Mvc;
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Products;
 
 /// <summary>
-/// Controller for managing product operations
+/// Controller responsável pelas operações de produtos.
 /// </summary>
+/// <remarks>
+/// Este controller expõe endpoints REST para criar, consultar, atualizar, listar e excluir produtos.
+/// 
+/// Recursos disponíveis:
+/// - Criar produtos
+/// - Consultar por ID
+/// - Atualizar por ID
+/// - Excluir por ID
+/// - Listar com paginação, ordenação e filtros por categoria
+/// - Listar categorias existentes
+/// 
+/// A ordenação pode ser feita através do parâmetro `_order`.
+/// Exemplos de uso:
+/// - `_order=price desc` → Ordena por preço decrescente
+/// - `_order=title asc, price desc` → Ordena primeiro por título crescente e depois por preço decrescente
+/// 
+/// Campos permitidos na ordenação:
+/// - `id`
+/// - `title`
+/// - `price`
+/// - `category`
+/// </remarks>
 [Authorize]
 [ApiController]
 [Route("api/[controller]")]
@@ -38,8 +60,11 @@ public class ProductsController : BaseController
     }
 
     /// <summary>
-    /// POST /products - Creates a new product
+    /// Cria um novo produto.
     /// </summary>
+    /// <param name="request">Dados do produto a ser criado.</param>
+    /// <param name="cancellationToken">Token de cancelamento.</param>
+    /// <returns>Produto criado com sucesso.</returns>
     [HttpPost]
     [ProducesResponseType(typeof(ApiResponseWithData<CreateProductResponse>), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
@@ -61,8 +86,11 @@ public class ProductsController : BaseController
     }
 
     /// <summary>
-    /// GET /products/{id} - Retrieves a product by its ID
+    /// Recupera um produto pelo seu identificador.
     /// </summary>
+    /// <param name="id">ID único do produto.</param>
+    /// <param name="cancellationToken">Token de cancelamento.</param>
+    /// <returns>Produto encontrado, ou erro caso não exista.</returns>
     [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponseWithData<GetProductResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
@@ -86,8 +114,11 @@ public class ProductsController : BaseController
     }
 
     /// <summary>
-    /// DELETE /products/{id} - Deletes a product by its ID
+    /// Remove um produto pelo seu identificador.
     /// </summary>
+    /// <param name="id">ID único do produto.</param>
+    /// <param name="cancellationToken">Token de cancelamento.</param>
+    /// <returns>Status da operação de exclusão.</returns>
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
@@ -109,8 +140,12 @@ public class ProductsController : BaseController
     }
 
     /// <summary>
-    /// PUT /products/{id} - Updates a product
+    /// Atualiza um produto existente.
     /// </summary>
+    /// <param name="id">ID único do produto a ser atualizado.</param>
+    /// <param name="request">Dados do produto a atualizar.</param>
+    /// <param name="cancellationToken">Token de cancelamento.</param>
+    /// <returns>Produto atualizado, ou erro caso não seja encontrado.</returns>
     [HttpPut("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponseWithData<UpdateProductResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
@@ -136,8 +171,20 @@ public class ProductsController : BaseController
     }
 
     /// <summary>
-    /// GET /products - Lists products with pagination and ordering
+    /// Lista os produtos com suporte a paginação e ordenação.
     /// </summary>
+    /// <param name="_page">Número da página (padrão: 1).</param>
+    /// <param name="_size">Quantidade de itens por página (padrão: 10).</param>
+    /// <param name="_order">
+    /// Campos de ordenação, podendo incluir direção asc/desc.  
+    /// Exemplos:  
+    /// - "price desc"  
+    /// - "title asc, price desc"  
+    /// 
+    /// Campos permitidos: id, title, price, category.
+    /// </param>
+    /// <param name="cancellationToken">Token de cancelamento.</param>
+    /// <returns>Lista paginada de produtos.</returns>
     [HttpGet]
     [ProducesResponseType(typeof(ApiResponseWithData<ListProductsResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> ListProducts([FromQuery] int _page = 1, [FromQuery] int _size = 10, [FromQuery] string? _order = null, CancellationToken cancellationToken = default)
@@ -159,8 +206,10 @@ public class ProductsController : BaseController
     }
 
     /// <summary>
-    /// GET /products/categories - Lists all product categories
+    /// Lista todas as categorias de produtos.
     /// </summary>
+    /// <param name="cancellationToken">Token de cancelamento.</param>
+    /// <returns>Lista de categorias.</returns>
     [HttpGet("categories")]
     [ProducesResponseType(typeof(ApiResponseWithData<GetCategoriesResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetCategories(CancellationToken cancellationToken)
@@ -177,8 +226,21 @@ public class ProductsController : BaseController
     }
 
     /// <summary>
-    /// GET /products/category/{category} - Lists products by category with pagination and ordering
+    /// Lista produtos por categoria, com suporte a paginação e ordenação.
     /// </summary>
+    /// <param name="category">Nome da categoria a filtrar.</param>
+    /// <param name="_page">Número da página (padrão: 1).</param>
+    /// <param name="_size">Quantidade de itens por página (padrão: 10).</param>
+    /// <param name="_order">
+    /// Campos de ordenação, podendo incluir direção asc/desc.  
+    /// Exemplos:  
+    /// - "price desc"  
+    /// - "title asc, price desc"  
+    /// 
+    /// Campos permitidos: id, title, price, category.
+    /// </param>
+    /// <param name="cancellationToken">Token de cancelamento.</param>
+    /// <returns>Lista paginada de produtos filtrados pela categoria.</returns>
     [HttpGet("category/{category}")]
     [ProducesResponseType(typeof(ApiResponseWithData<GetByCategoryResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]

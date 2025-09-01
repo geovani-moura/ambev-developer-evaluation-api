@@ -1,6 +1,8 @@
-﻿using Ambev.DeveloperEvaluation.Domain.Entities;
+﻿using Ambev.DeveloperEvaluation.Common.Repositories;
+using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Ambev.DeveloperEvaluation.ORM.Repositories;
 
@@ -41,7 +43,7 @@ public class UserRepository : IUserRepository
     /// <returns>The user if found, null otherwise</returns>
     public async Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await _context.Users.FirstOrDefaultAsync(o=> o.Id == id, cancellationToken);
+        return await _context.Users.FirstOrDefaultAsync(o => o.Id == id, cancellationToken);
     }
 
     /// <summary>
@@ -71,5 +73,75 @@ public class UserRepository : IUserRepository
         _context.Users.Remove(user);
         await _context.SaveChangesAsync(cancellationToken);
         return true;
+    }
+
+    public async Task<User?> UpdateAsync(User user, CancellationToken cancellationToken = default)
+    {
+        var existing = await GetByIdAsync(user.Id, cancellationToken);
+        if (existing == null)
+            return null;
+
+        _context.Entry(existing).CurrentValues.SetValues(user);
+        await _context.SaveChangesAsync(cancellationToken);
+        return existing;
+    }
+
+    public async Task<PagedResult<User>> ListAsync(
+        int page = 1,
+        int size = 10,
+        string? order = null,
+        CancellationToken cancellationToken = default)
+    {
+        var query = _context.Users.AsQueryable();
+
+        query = ApplyOrdering(query, order);
+
+        var totalItems = await query.CountAsync(cancellationToken);
+        var users = await query
+            .Skip((page - 1) * size)
+            .Take(size)
+            .ToListAsync(cancellationToken);
+
+        return new PagedResult<User>
+        {
+            Data = users,
+            TotalItems = totalItems,
+            CurrentPage = page,
+            TotalPages = (int)Math.Ceiling(totalItems / (double)size)
+        };
+    }
+
+
+    // --- Helper de ordenação minimalista ---
+    private static IQueryable<User> ApplyOrdering(IQueryable<User> q, string? order)
+    {
+        if (string.IsNullOrWhiteSpace(order))
+            return q.OrderBy(u => u.Id);
+
+        IOrderedQueryable<User>? ordered = null;
+
+        foreach (var raw in order.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+        {
+            var parts = raw.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            var field = parts[0].ToLowerInvariant();
+            var desc = parts.Length > 1 && parts[1].Equals("desc", StringComparison.OrdinalIgnoreCase);
+
+            Expression<Func<User, object>> key = field switch
+            {
+                "id" => u => u.Id,
+                "email" => u => u.Email!,
+                "username" => u => u.Username!,
+                "status" => u => u.Status!,
+                "role" => u => u.Role!,
+                "phone" => u => u.Phone!,
+                _ => u => u.Id
+            };
+
+            ordered = ordered == null
+                ? (desc ? q.OrderByDescending(key) : q.OrderBy(key))
+                : (desc ? ordered.ThenByDescending(key) : ordered.ThenBy(key));
+        }
+
+        return ordered ?? q.OrderBy(u => u.Id);
     }
 }
