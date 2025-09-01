@@ -1,43 +1,37 @@
-﻿using Ambev.DeveloperEvaluation.Domain.Repositories;
+﻿using Ambev.DeveloperEvaluation.Domain.Entities;
+using Ambev.DeveloperEvaluation.Domain.Repositories;
+using AutoMapper;
+using FluentValidation;
 using MediatR;
 
 namespace Ambev.DeveloperEvaluation.Application.Products.UpdateProduct;
 
-public class UpdateProductHandler : IRequestHandler<UpdateProductCommand, UpdateProductResult?>
+public class UpdateProductHandler : IRequestHandler<UpdateProductCommand, UpdateProductResult>
 {
     private readonly IProductRepository _repo;
+    private readonly IMapper _mapper;
 
-    public UpdateProductHandler(IProductRepository repo) => _repo = repo;
-
-    public async Task<UpdateProductResult?> Handle(UpdateProductCommand r, CancellationToken ct)
+    public UpdateProductHandler(IProductRepository repo, IMapper mapper)
     {
-        var existing = await _repo.GetByIdAsync(r.Id, ct);
-        if (existing is null) return null;
+        _repo = repo;
+        _mapper = mapper;
+    }
 
-        existing.Title = r.Title;
-        existing.Price = r.Price;
-        existing.Description = r.Description;
-        existing.Category = r.Category;
-        existing.Image = r.Image;
-        existing.RatingRate = r.RatingRate;
-        existing.RatingCount = r.RatingCount;
+    public async Task<UpdateProductResult> Handle(UpdateProductCommand r, CancellationToken cancellationToken)
+    {
+        var validator = new UpdateProductCommandValidator();
+        var validationResult = await validator.ValidateAsync(r, cancellationToken);
 
-        var saved = await _repo.UpdateAsync(existing, ct);
-        if (saved is null) return null;
+        if (!validationResult.IsValid)
+            throw new ValidationException(validationResult.Errors);
 
-        return new UpdateProductResult
-        {
-            Id = saved.Id,
-            Title = saved.Title,
-            Price = saved.Price,
-            Description = saved.Description,
-            Category = saved.Category,
-            Image = saved.Image,
-            Rating = new UpdateProductResult.RatingResult
-            {
-                Rate = saved.RatingRate,
-                Count = saved.RatingCount
-            }
-        };
+        var exists = await _repo.GetByIdAsync(r.Id, cancellationToken);
+        if (exists == null)
+            throw new InvalidOperationException($"Produto with id {r.Id} already exists");
+
+        var entity = _mapper.Map<Product>(r);
+        var update = await _repo.UpdateAsync(entity, cancellationToken);
+        var result = _mapper.Map<UpdateProductResult>(update);
+        return result;
     }
 }

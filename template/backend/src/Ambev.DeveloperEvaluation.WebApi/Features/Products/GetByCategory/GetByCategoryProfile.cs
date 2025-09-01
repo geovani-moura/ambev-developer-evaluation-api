@@ -7,6 +7,10 @@ public class GetByCategoryProfile : Profile
 {
     public GetByCategoryProfile()
     {
+        // WebAPi -> Aplication
+        CreateMap<GetByCategoryRequest, GetByCategoryCommand>();
+
+        // Aplication -> WebApi
         CreateMap<GetByCategoryResult, GetByCategoryResponse>();
     }
 }

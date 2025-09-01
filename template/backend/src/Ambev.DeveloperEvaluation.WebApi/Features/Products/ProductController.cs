@@ -102,7 +102,7 @@ public class ProductsController : BaseController
         var command = _mapper.Map<DeleteProductCommand>(request.Id);
         var deleted = await _mediator.Send(command, cancellationToken);
 
-        if (!deleted.Success) // <- corrigido
+        if (!deleted.Success)
             return NotFound(new ApiResponse { Success = false, Message = "Product not found" });
 
         return Ok(new ApiResponse { Success = true, Message = "Product deleted successfully" });
@@ -117,9 +117,7 @@ public class ProductsController : BaseController
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateProduct([FromRoute] Guid id, [FromBody] UpdateProductRequest request, CancellationToken cancellationToken)
     {
-        // garante consistência rota/corpo
         request.Id = id;
-
         var validator = new UpdateProductRequestValidator();
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid) return BadRequest(validationResult.Errors);

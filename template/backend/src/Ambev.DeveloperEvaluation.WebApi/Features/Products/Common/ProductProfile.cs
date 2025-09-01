@@ -7,6 +7,7 @@ public class ProductProfile : Profile
 {
     public ProductProfile()
     {
+        // Aplication -> WebApi  
         CreateMap<ProductResult, ProductResponse>();
     }
 }

@@ -7,6 +7,10 @@ public class ListProductsProfile : Profile
 {
     public ListProductsProfile()
     {
-        CreateMap<ListProductsResponse, ListProductsResult>();
+        // WebAPi -> Aplication
+        CreateMap<ListProductsRequest, ListProductsCommand>();
+
+        // Aplication -> WebApi
+        CreateMap<ListProductsResult, ListProductsResponse>();
     }
 }
