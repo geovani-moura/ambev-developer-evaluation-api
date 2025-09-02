@@ -1,16 +1,14 @@
-﻿using Ambev.DeveloperEvaluation.Domain.Enums;
-
-namespace Ambev.DeveloperEvaluation.WebApi.Features.Users.ListUsers;
+﻿namespace Ambev.DeveloperEvaluation.WebApi.Features.Users.ListUsers;
 
 /// <summary>
 /// Response returned when listing users.
 /// </summary>
-public class ListUsersResponse
+public partial class ListUsersResponse
 {
     /// <summary>
     /// List of users for the current page.
     /// </summary>
-    public List<Item> Data { get; set; } = [];
+    public List<ListUserReponse> Data { get; set; } = [];
 
     /// <summary>
     /// Total number of users available.
@@ -26,17 +24,4 @@ public class ListUsersResponse
     /// Total number of pages.
     /// </summary>
     public int TotalPages { get; set; }
-
-    /// <summary>
-    /// Representation of a user in the list.
-    /// </summary>
-    public class Item
-    {
-        public Guid Id { get; set; }
-        public string Username { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public string Phone { get; set; } = string.Empty;
-        public UserStatus Status { get; set; }
-        public UserRole Role { get; set; }
-    }
 }

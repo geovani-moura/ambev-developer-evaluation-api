@@ -142,12 +142,7 @@ public class UsersController : BaseController
         var command = _mapper.Map<ListUsersCommand>(request);
         var result = await _mediator.Send(command, cancellationToken);
 
-        return Ok(new ApiResponseWithData<ListUsersResponse>
-        {
-            Success = true,
-            Message = "Users listed successfully",
-            Data = _mapper.Map<ListUsersResponse>(result)
-        });
+        return Ok(_mapper.Map<ListUsersResponse>(result));
     }
 
     /// <summary>

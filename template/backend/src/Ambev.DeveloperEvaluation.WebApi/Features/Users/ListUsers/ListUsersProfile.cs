@@ -12,7 +12,7 @@ public class ListUsersProfile : Profile
     public ListUsersProfile()
     {
         // Application => WebApi
-        CreateMap<ListUsersResult.Item, ListUsersResponse.Item>();
+        CreateMap<ListUsersResult.Item, ListUsersResponse.ListUserReponse>();
         CreateMap<ListUsersResult, ListUsersResponse>()
             .ForMember(dest => dest.Data, opt => opt.MapFrom(src => src.Data))
             .ForMember(dest => dest.TotalItems, opt => opt.MapFrom(src => src.TotalItems))

@@ -1,6 +1,8 @@
 ﻿using Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
+using Ambev.DeveloperEvaluation.Application.Sales.ListSales;
 using Ambev.DeveloperEvaluation.WebApi.Common;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.CreateSale;
+using Ambev.DeveloperEvaluation.WebApi.Features.Sales.ListSales;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -44,5 +46,29 @@ public class SalesController : BaseController
             Message = "Sale created successfully",
             Data = _mapper.Map<CreateSaleResponse>(result)
         });
+    }
+    /// <summary>
+    /// Lista todas as vendas com paginação, ordenação e filtros.
+    /// </summary>
+    /// <param name="page">Número da página (default = 1)</param>
+    /// <param name="size">Itens por página (default = 10)</param>
+    /// <param name="order">Ordenação, ex: "date desc, customerName asc"</param>
+    [HttpGet]
+    [ProducesResponseType(typeof(ApiResponseWithData<ListSalesResponse>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAllSales(
+        [FromQuery(Name = "_page")] int _page = 1,
+        [FromQuery(Name = "_size")] int _size = 10,
+        [FromQuery(Name = "_order")] string? _order = null,
+        CancellationToken cancellationToken = default)
+    {
+        var request = new ListSalesRequest { Page = _page, Size = _size, Order = _order };
+        var validator = new ListSalesRequestValidator();
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        if (!validationResult.IsValid) return BadRequest(validationResult.Errors);
+
+        var command = _mapper.Map<ListSalesCommand>(request);
+        var result = await _mediator.Send(command, cancellationToken);
+
+        return Ok(_mapper.Map<ListSalesResponse>(result));
     }
 }

@@ -13,6 +13,6 @@ public class CreateSaleProfile : Profile
 
         // Application → WebApi
         CreateMap<CreateSaleResult, CreateSaleResponse>();
-        CreateMap<CreateSaleResult.SaleItemResult, CreateSaleResponse.SaleItemResponse>();
+        CreateMap<CreateSaleItemResult, CreateSaleItemResponse>();
     }
 }

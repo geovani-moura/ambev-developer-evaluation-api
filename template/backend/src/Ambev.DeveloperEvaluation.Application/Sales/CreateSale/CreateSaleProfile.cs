@@ -8,7 +8,7 @@ public class CreateSaleProfile : Profile
 {
     public CreateSaleProfile()
     {
-        CreateMap<SaleItem, CreateSaleResult.SaleItemResult>();
+        CreateMap<SaleItem, CreateSaleItemResult>();
         CreateMap<Sale, CreateSaleResult>()
             .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items));
 
