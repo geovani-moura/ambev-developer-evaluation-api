@@ -27,7 +27,7 @@ public class ProductRepository : IProductRepository
         return await _context.Products.FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
     }
 
-    public async Task<Product> UpdateAsync(Product product, CancellationToken cancellationToken = default)
+    public async Task<Product?> UpdateAsync(Product product, CancellationToken cancellationToken = default)
     {
         var existing = await _context.Products.FirstOrDefaultAsync(p => p.Id == product.Id, cancellationToken);
         if (existing == null) return null;
@@ -159,9 +159,14 @@ public class ProductRepository : IProductRepository
                 _ => p => p.Id
             };
 
-            ordered = ordered == null
-                ? (desc ? q.OrderByDescending(key) : q.OrderBy(key))
-                : (desc ? ordered.ThenByDescending(key) : ordered.ThenBy(key));
+            if (ordered == null)
+            {
+                ordered = desc ? q.OrderByDescending(key) : q.OrderBy(key);
+            }
+            else
+            {
+                ordered = desc ? ordered.ThenByDescending(key) : ordered.ThenBy(key);
+            }
         }
 
         return ordered ?? q.OrderBy(p => p.Id);

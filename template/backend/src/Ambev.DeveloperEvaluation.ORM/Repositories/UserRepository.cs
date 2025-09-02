@@ -137,9 +137,14 @@ public class UserRepository : IUserRepository
                 _ => u => u.Id
             };
 
-            ordered = ordered == null
-                ? (desc ? q.OrderByDescending(key) : q.OrderBy(key))
-                : (desc ? ordered.ThenByDescending(key) : ordered.ThenBy(key));
+            if (ordered == null)
+            {
+                ordered = desc ? q.OrderByDescending(key) : q.OrderBy(key);
+            }
+            else
+            {
+                ordered = desc ? ordered.ThenByDescending(key) : ordered.ThenBy(key);
+            }
         }
 
         return ordered ?? q.OrderBy(u => u.Id);

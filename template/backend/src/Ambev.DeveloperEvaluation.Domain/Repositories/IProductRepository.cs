@@ -21,7 +21,7 @@ public interface IProductRepository
     /// <summary>
     /// Updates an existing product
     /// </summary>
-    Task<Product> UpdateAsync(Product product, CancellationToken cancellationToken = default);
+    Task<Product?> UpdateAsync(Product product, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Deletes a product by id
