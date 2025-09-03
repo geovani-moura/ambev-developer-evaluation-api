@@ -11,6 +11,8 @@ public class ListProductsProfile : Profile
         CreateMap<ListProductsRequest, ListProductsCommand>();
 
         // Aplication -> WebApi
+        CreateMap<ListProductRatingResult, ListProductRatingResponse>();
+        CreateMap<ListProductResult, ListProductResponse>();
         CreateMap<ListProductsResult, ListProductsResponse>();
     }
 }

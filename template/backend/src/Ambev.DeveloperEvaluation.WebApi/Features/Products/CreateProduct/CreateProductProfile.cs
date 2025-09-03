@@ -13,6 +13,7 @@ public class CreateProductProfile : Profile
             .ForMember(d => d.RatingCount, o => o.MapFrom(s => s.Rating.Count));
 
         // Aplication -> WebApi
+        CreateMap<CreateProductRatingResult, CreateProductRatingResponse>();
         CreateMap<CreateProductResult, CreateProductResponse>();
     }
 }

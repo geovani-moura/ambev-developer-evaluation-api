@@ -1,4 +1,5 @@
 ﻿using Ambev.DeveloperEvaluation.Domain.Enums;
+using System.Text.Json.Serialization;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Users.UpdateUser;
 
@@ -10,6 +11,7 @@ public class UpdateUserRequest
     /// <summary>
     /// User ID to update (from route).
     /// </summary>
+    [JsonIgnore]
     public Guid Id { get; set; }
 
     /// <summary>

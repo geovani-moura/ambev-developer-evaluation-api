@@ -18,7 +18,7 @@ public class Sale
 
     public List<SaleItem> Items { get; set; } = [];
 
-    public void AddItem(Guid productId, string productTitle, string productCategory, int quantity, decimal unitPrice)
+    public void AddItem(Guid productId, string productTitle, string productCategory, int quantity, decimal unitPrice, Guid? IdItem = null)
     {
         if (quantity > 20)
             throw new InvalidOperationException("Quantidade máxima de 20 unidades por produto.");
@@ -31,7 +31,7 @@ public class Sale
 
         var item = new SaleItem
         {
-            Id = Guid.NewGuid(),
+            Id = IdItem ?? Guid.NewGuid(),
             SaleId = Id,
             ProductId = productId,
             ProductTitle = productTitle,

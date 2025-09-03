@@ -1,6 +1,4 @@
-﻿using Ambev.DeveloperEvaluation.WebApi.Features.Products.Common;
-
-namespace Ambev.DeveloperEvaluation.WebApi.Features.Products.UpdateProduct;
+﻿namespace Ambev.DeveloperEvaluation.WebApi.Features.Products.UpdateProduct;
 
 public class UpdateProductResponse
 {
@@ -11,6 +9,13 @@ public class UpdateProductResponse
     public string Category { get; set; } = string.Empty;
     public string Image { get; set; } = string.Empty;
 
-    public RatingResponse Rating { get; set; } = new();
+    public UpdateProductRatingResponse Rating { get; set; } = new();
 
 }
+
+public class UpdateProductRatingResponse
+{
+    public double Rate { get; set; }
+    public int Count { get; set; }
+}
+

@@ -11,6 +11,8 @@ public class GetByCategoryProfile : Profile
         CreateMap<GetByCategoryRequest, GetByCategoryCommand>();
 
         // Aplication -> WebApi
+        CreateMap<GetByCategoryRatingResult, GetByCategoryRatingResponse>();
+        CreateMap<GetByCategoryProductResult, GetByCategoryProductResponse>();
         CreateMap<GetByCategoryResult, GetByCategoryResponse>();
     }
 }

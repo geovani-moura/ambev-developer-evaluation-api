@@ -1,7 +1,10 @@
-﻿namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.UpdateSale;
+﻿using System.Text.Json.Serialization;
+
+namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.UpdateSale;
 
 public class UpdateSaleRequest
 {
+    [JsonIgnore]
     public Guid Id { get; set; }
     public DateTime Date { get; set; } = DateTime.UtcNow;
 

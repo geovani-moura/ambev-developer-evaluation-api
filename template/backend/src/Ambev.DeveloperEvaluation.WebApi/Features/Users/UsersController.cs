@@ -165,12 +165,7 @@ public class UsersController : BaseController
         if (result is null)
             return NotFound(new ApiResponse { Success = false, Message = "User not found" });
 
-        return Ok(new ApiResponseWithData<UpdateUserResponse>
-        {
-            Success = true,
-            Message = "User updated successfully",
-            Data = _mapper.Map<UpdateUserResponse>(result)
-        });
+        return Ok(_mapper.Map<UpdateUserResponse>(result));
     }
 
 }

@@ -8,7 +8,8 @@ public class UpdateSaleProfile : Profile
     public UpdateSaleProfile()
     {
         // Application ->  Domain
-        CreateMap<UpdateSaleCommand, Sale>();
+        CreateMap<UpdateSaleCommand, Sale>()
+            .ForMember(dest => dest.Items, opt => opt.Ignore());
         CreateMap<UpdateSaleItemCommand, SaleItem>();
 
         // Domain -> Application

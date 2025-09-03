@@ -151,6 +151,7 @@ public class ProductsController : BaseController
         var validator = new UpdateProductRequestValidator();
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid) return BadRequest(validationResult.Errors);
+        if (!validationResult.IsValid) return BadRequest(validationResult.Errors);
 
         var command = _mapper.Map<UpdateProductCommand>(request);
         var result = await _mediator.Send(command, cancellationToken);

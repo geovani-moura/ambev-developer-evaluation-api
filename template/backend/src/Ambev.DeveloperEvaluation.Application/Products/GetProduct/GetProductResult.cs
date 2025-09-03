@@ -11,3 +11,9 @@ public class GetProductResult
 
     public GetProductRatingResult Rating { get; set; } = new();
 }
+
+public class GetProductRatingResult
+{
+    public double Rate { get; set; }
+    public int Count { get; set; }
+}

@@ -7,12 +7,13 @@ public class UpdateProductProfile : Profile
 {
     public UpdateProductProfile()
     {
-        // ===== WebAPi -> Aplication =====
+        // WebAPi -> Aplication
         CreateMap<UpdateProductRequest, UpdateProductCommand>()
             .ForMember(d => d.RatingRate, o => o.MapFrom(s => s.Rating.Rate))
             .ForMember(d => d.RatingCount, o => o.MapFrom(s => s.Rating.Count));
 
-        // ===== Application -> WebApi =====
+        // Application -> WebApi
+        CreateMap<UpdateProductRatingResult, UpdateProductRatingResponse>();
         CreateMap<UpdateProductResult, UpdateProductResponse>();
     }
 }

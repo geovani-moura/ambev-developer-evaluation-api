@@ -9,7 +9,6 @@ using Ambev.DeveloperEvaluation.WebApi.Middleware;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
-using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Ambev.DeveloperEvaluation.WebApi;
 
@@ -30,10 +29,10 @@ public class Program
             builder.AddBasicHealthChecks();
             builder.Services.AddSwaggerGen(c =>
             {
-                c.SchemaGeneratorOptions = new SchemaGeneratorOptions
-                {
-                    SchemaIdSelector = type => type.FullName // evita conflito de nomes
-                };
+                //c.SchemaGeneratorOptions = new SchemaGeneratorOptions
+                //{
+                //    SchemaIdSelector = type => type.FullName // evita conflito de nomes
+                //};
             });
 
             builder.Services.AddDbContext<DefaultContext>(options =>
