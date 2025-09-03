@@ -10,21 +10,21 @@ public class UpdateSaleRequest
 
     // Cliente (denormalizado)
     public required Guid CustomerId { get; set; }
-    public string CustomerName { get; set; } = string.Empty;
-    public string CustomerEmail { get; set; } = string.Empty;
-    public string CustomerPhone { get; set; } = string.Empty;
+    public required string CustomerName { get; set; }
+    public required string CustomerEmail { get; set; }
+    public required string CustomerPhone { get; set; }
 
     public string Branch { get; set; } = string.Empty;
 
-    public List<UpdateSaleItemRequest> Items { get; set; } = new();
+    public required List<UpdateSaleItemRequest> Items { get; set; } = [];
 }
 
 public class UpdateSaleItemRequest
 {
     public Guid Id { get; set; }
-    public Guid ProductId { get; set; }
-    public string ProductTitle { get; set; } = string.Empty;
-    public string ProductCategory { get; set; } = string.Empty;
-    public int Quantity { get; set; }
-    public decimal UnitPrice { get; set; }
+    public required Guid ProductId { get; set; }
+    public required string ProductTitle { get; set; }
+    public required string ProductCategory { get; set; }
+    public required int Quantity { get; set; }
+    public required decimal UnitPrice { get; set; }
 }

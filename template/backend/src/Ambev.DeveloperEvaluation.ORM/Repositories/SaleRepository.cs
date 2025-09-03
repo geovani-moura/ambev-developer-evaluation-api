@@ -47,7 +47,7 @@ public class SaleRepository : ISaleRepository
 
         // Remove os que não vieram no update
         var itemsToRemove = existing.Items
-            .Where(ei => sale.Items.All(ni => ni.Id != Guid.Empty && ni.Id != ei.Id))
+            .Where(ei => sale.Items.All(ni => ei.Id != Guid.Empty && ni.Id != ei.Id))
             .ToList();
 
         foreach (var item in itemsToRemove)
@@ -57,7 +57,8 @@ public class SaleRepository : ISaleRepository
 
         foreach (var item in sale.Items)
         {
-            var existingItem = existing.Items.FirstOrDefault(ei => ei.Id == item.Id);
+
+            var existingItem = existing.Items.FirstOrDefault(ei => item.Id != Guid.Empty && ei.Id == item.Id);
 
             if (existingItem != null)
             {
