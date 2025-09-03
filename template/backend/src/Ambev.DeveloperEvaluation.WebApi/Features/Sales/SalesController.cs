@@ -1,7 +1,9 @@
 ﻿using Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
+using Ambev.DeveloperEvaluation.Application.Sales.DeleteSale;
 using Ambev.DeveloperEvaluation.Application.Sales.ListSales;
 using Ambev.DeveloperEvaluation.WebApi.Common;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.CreateSale;
+using Ambev.DeveloperEvaluation.WebApi.Features.Sales.DeleteSale;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.ListSales;
 using AutoMapper;
 using MediatR;
@@ -70,5 +72,31 @@ public class SalesController : BaseController
         var result = await _mediator.Send(command, cancellationToken);
 
         return Ok(_mapper.Map<ListSalesResponse>(result));
+    }
+
+    /// <summary>
+    /// Remove um sales pelo seu identificador.
+    /// </summary>
+    /// <param name="id">ID único do sales.</param>
+    /// <param name="cancellationToken">Token de cancelamento.</param>
+    /// <returns>Status da operação de exclusão.</returns>
+    [HttpDelete("{id:guid}")]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteSale([FromRoute] Guid id, CancellationToken cancellationToken)
+    {
+        var request = new DeleteSaleRequest { Id = id };
+        var validator = new DeleteSaleRequestValidator();
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        if (!validationResult.IsValid) return BadRequest(validationResult.Errors);
+
+        var command = _mapper.Map<DeleteSaleCommand>(request.Id);
+        var deleted = await _mediator.Send(command, cancellationToken);
+
+        if (!deleted.Success)
+            return NotFound(new ApiResponse { Success = false, Message = "Product not found" });
+
+        return Ok(new ApiResponse { Success = true, Message = "Product deleted successfully" });
     }
 }
