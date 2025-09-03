@@ -14,9 +14,9 @@ public class ListProductsHandler : IRequestHandler<ListProductsCommand, ListProd
         _mapper = mapper;
     }
 
-    public async Task<ListProductsResult> Handle(ListProductsCommand r, CancellationToken ct)
+    public async Task<ListProductsResult> Handle(ListProductsCommand r, CancellationToken cancellationToken)
     {
-        var page = await _repo.ListAsync(r.Page, r.Size, r.Order, ct);
+        var page = await _repo.ListAsync(r.Page, r.Size, r.Order, cancellationToken);
         var result = _mapper.Map<ListProductsResult>(page);
         return result;
     }

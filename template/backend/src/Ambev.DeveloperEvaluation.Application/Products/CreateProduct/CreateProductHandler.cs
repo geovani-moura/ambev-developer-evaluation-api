@@ -16,10 +16,10 @@ public class CreateProductHandler : IRequestHandler<CreateProductCommand, Create
         _mapper = mapper;
     }
 
-    public async Task<CreateProductResult> Handle(CreateProductCommand r, CancellationToken ct)
+    public async Task<CreateProductResult> Handle(CreateProductCommand r, CancellationToken cancellationToken)
     {
         var entity = _mapper.Map<Product>(r);
-        var create = await _repo.CreateAsync(entity, ct);
+        var create = await _repo.CreateAsync(entity, cancellationToken);
         var result = _mapper.Map<CreateProductResult>(create);
         return result;
     }

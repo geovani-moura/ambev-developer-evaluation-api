@@ -3,17 +3,17 @@
 public class CreateProductRequest
 {
     public string Title { get; set; } = string.Empty;
-    public decimal Price { get; set; }
+    public required decimal Price { get; set; }
     public string Description { get; set; } = string.Empty;
     public string Category { get; set; } = string.Empty;
     public string Image { get; set; } = string.Empty;
 
-    public CreateProductRatingRequest Rating { get; set; } = new();
+    public required CreateProductRatingRequest Rating { get; set; }
 
 }
 
 public class CreateProductRatingRequest
 {
-    public double Rate { get; set; }
-    public int Count { get; set; }
+    public required double Rate { get; set; }
+    public required int Count { get; set; }
 }

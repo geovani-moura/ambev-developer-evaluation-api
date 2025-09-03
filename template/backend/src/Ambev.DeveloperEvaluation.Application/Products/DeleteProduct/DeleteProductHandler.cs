@@ -8,9 +8,9 @@ public class DeleteProductHandler : IRequestHandler<DeleteProductCommand, Delete
     private readonly IProductRepository _repo;
     public DeleteProductHandler(IProductRepository repo) => _repo = repo;
 
-    public async Task<DeleteProductResult> Handle(DeleteProductCommand r, CancellationToken ct)
+    public async Task<DeleteProductResult> Handle(DeleteProductCommand r, CancellationToken cancellationToken)
     {
-        var ok = await _repo.DeleteAsync(r.Id, ct);
+        var ok = await _repo.DeleteAsync(r.Id, cancellationToken);
         return new DeleteProductResult { Success = ok };
     }
 }

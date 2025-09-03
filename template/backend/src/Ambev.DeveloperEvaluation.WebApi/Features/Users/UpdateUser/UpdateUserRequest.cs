@@ -37,10 +37,10 @@ public class UpdateUserRequest
     /// <summary>
     /// Current status of the user (Active, Inactive, Suspended).
     /// </summary>
-    public UserStatus Status { get; set; }
+    public required UserStatus Status { get; set; }
 
     /// <summary>
     /// Role of the user (Customer, Manager, Admin).
     /// </summary>
-    public UserRole Role { get; set; }
+    public required UserRole Role { get; set; }
 }

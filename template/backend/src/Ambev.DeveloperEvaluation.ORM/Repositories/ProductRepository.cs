@@ -49,7 +49,7 @@ public class ProductRepository : IProductRepository
         return true;
     }
 
-    public async Task<IReadOnlyList<string>> GetCategoriesAsync(CancellationToken ct = default)
+    public async Task<IReadOnlyList<string>> GetCategoriesAsync(CancellationToken cancellationToken = default)
     {
         return await _context.Products
             .AsNoTracking()
@@ -57,28 +57,28 @@ public class ProductRepository : IProductRepository
             .Select(p => p.Category!)
             .Distinct()
             .OrderBy(c => c)
-            .ToListAsync(ct);
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<PagedResult<Product>> ListAsync(
         int page,
         int size,
         string? order,
-        CancellationToken ct = default)
+        CancellationToken cancellationToken = default)
     {
         var query = _context.Products.AsNoTracking();
 
         // Ordenação simples: aceita "id", "title", "price", "category" (+ "asc"/"desc")
         query = ApplyOrdering(query, order);
 
-        var totalItems = await query.CountAsync(ct);
+        var totalItems = await query.CountAsync(cancellationToken);
         var totalPages = Math.Max(1, (int)Math.Ceiling(totalItems / (double)size));
         var currentPage = Math.Min(Math.Max(1, page), totalPages);
 
         var data = await query
             .Skip((currentPage - 1) * size)
             .Take(size)
-            .ToListAsync(ct);
+            .ToListAsync(cancellationToken);
 
         return new PagedResult<Product>
         {
@@ -94,7 +94,7 @@ public class ProductRepository : IProductRepository
         int page,
         int size,
         string? order,
-        CancellationToken ct = default)
+        CancellationToken cancellationToken = default)
     {
         // defesa básica
         if (string.IsNullOrWhiteSpace(category))
@@ -117,14 +117,14 @@ public class ProductRepository : IProductRepository
         query = ApplyOrdering(query, order);
 
         // paginação
-        var totalItems = await query.CountAsync(ct);
+        var totalItems = await query.CountAsync(cancellationToken);
         var totalPages = Math.Max(1, (int)Math.Ceiling(totalItems / (double)size));
         var currentPage = Math.Min(Math.Max(1, page), totalPages);
 
         var data = await query
             .Skip((currentPage - 1) * size)
             .Take(size)
-            .ToListAsync(ct);
+            .ToListAsync(cancellationToken);
 
         return new PagedResult<Product>
         {

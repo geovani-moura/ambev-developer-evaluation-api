@@ -31,7 +31,7 @@ public interface IProductRepository
     /// <summary>
     /// List a category for products
     /// </summary>
-    Task<IReadOnlyList<string>> GetCategoriesAsync(CancellationToken ct = default);
+    Task<IReadOnlyList<string>> GetCategoriesAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Lists all products with pagination and ordering
@@ -40,7 +40,7 @@ public interface IProductRepository
         int page,
         int size,
         string? order,
-        CancellationToken ct = default);
+        CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Lists products by category with pagination and ordering
@@ -50,5 +50,5 @@ public interface IProductRepository
         int page,
         int size,
         string? order,
-        CancellationToken ct = default);
+        CancellationToken cancellationToken = default);
 }

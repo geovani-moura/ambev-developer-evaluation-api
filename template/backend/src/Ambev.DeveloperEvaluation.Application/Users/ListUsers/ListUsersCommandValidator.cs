@@ -21,7 +21,7 @@ public class ListUsersCommandValidator : AbstractValidator<ListUsersCommand>
             .WithMessage("Invalid order field. Allowed fields: id, username, email, status, role.");
     }
 
-    private bool BeAValidOrderField(string? order)
+    private static bool BeAValidOrderField(string? order)
     {
         if (string.IsNullOrWhiteSpace(order))
             return true;

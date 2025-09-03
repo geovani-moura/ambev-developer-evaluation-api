@@ -8,8 +8,8 @@ public class GetCategoriesHandler : IRequestHandler<GetCategoriesCommand, GetCat
     private readonly IProductRepository _repo;
     public GetCategoriesHandler(IProductRepository repo) => _repo = repo;
 
-    public async Task<GetCategoriesResult> Handle(GetCategoriesCommand request, CancellationToken ct)
+    public async Task<GetCategoriesResult> Handle(GetCategoriesCommand request, CancellationToken cancellationToken)
     {
-        return new GetCategoriesResult { Categories = (await _repo.GetCategoriesAsync(ct)).ToList() };
+        return new GetCategoriesResult { Categories = (await _repo.GetCategoriesAsync(cancellationToken)).ToList() };
     }
 }

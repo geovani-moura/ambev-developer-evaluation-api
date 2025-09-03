@@ -87,9 +87,9 @@ public class UserRepository : IUserRepository
     }
 
     public async Task<PagedResult<User>> ListAsync(
-        int page = 1,
-        int size = 10,
-        string? order = null,
+        int page,
+        int size,
+        string? order,
         CancellationToken cancellationToken = default)
     {
         var query = _context.Users.AsQueryable();

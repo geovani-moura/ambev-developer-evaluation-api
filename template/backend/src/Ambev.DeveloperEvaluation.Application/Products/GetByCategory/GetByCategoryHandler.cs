@@ -14,9 +14,9 @@ public class GetByCategoryHandler : IRequestHandler<GetByCategoryCommand, GetByC
         _mapper = mapper;
     }
 
-    public async Task<GetByCategoryResult> Handle(GetByCategoryCommand r, CancellationToken ct)
+    public async Task<GetByCategoryResult> Handle(GetByCategoryCommand r, CancellationToken cancellationToken)
     {
-        var list = await _repo.ListByCategoryAsync(r.Category, r.Page, r.Size, r.Order, ct);
+        var list = await _repo.ListByCategoryAsync(r.Category, r.Page, r.Size, r.Order, cancellationToken);
         var result = _mapper.Map<GetByCategoryResult>(list);
         return result;
     }

@@ -146,7 +146,6 @@ public class SaleRepository : ISaleRepository
             Expression<Func<Sale, object>> key = field switch
             {
                 "id" => s => s.Id,
-                "salenumber" => s => s.SaleNumber,
                 "date" => s => s.Date,
                 "customerid" => s => s.CustomerId,
                 "customername" => s => s.CustomerName,

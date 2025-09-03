@@ -21,7 +21,7 @@ public class ListSalesRequestValidator : AbstractValidator<ListSalesRequest>
             .WithMessage("Invalid order field. Allowed fields: id, salenumber, date, customerid, customername, branch, totalamount.");
     }
 
-    private bool BeAValidOrderField(string? order)
+    private static bool BeAValidOrderField(string? order)
     {
         if (string.IsNullOrWhiteSpace(order))
             return true;

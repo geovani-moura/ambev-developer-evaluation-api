@@ -5,7 +5,7 @@ public class CreateSaleRequest
     public DateTime Date { get; set; } = DateTime.UtcNow;
 
     // Cliente (denormalizado)
-    public Guid CustomerId { get; set; }
+    public required Guid CustomerId { get; set; }
     public string CustomerName { get; set; } = string.Empty;
     public string CustomerEmail { get; set; } = string.Empty;
     public string CustomerPhone { get; set; } = string.Empty;

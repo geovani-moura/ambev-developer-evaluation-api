@@ -30,10 +30,10 @@ public class CreateUserRequest
     /// <summary>
     /// Gets or sets the initial status of the user account.
     /// </summary>
-    public UserStatus Status { get; set; }
+    public required UserStatus Status { get; set; }
 
     /// <summary>
     /// Gets or sets the role assigned to the user.
     /// </summary>
-    public UserRole Role { get; set; }
+    public required UserRole Role { get; set; }
 }
