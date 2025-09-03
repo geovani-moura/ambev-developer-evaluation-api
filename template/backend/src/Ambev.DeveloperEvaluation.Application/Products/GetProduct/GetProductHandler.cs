@@ -27,7 +27,7 @@ public class GetProductHandler : IRequestHandler<GetProductCommand, GetProductRe
 
         var user = await _repo.GetByIdAsync(command.Id, cancellationToken);
         if (user == null)
-            throw new KeyNotFoundException($"User with ID {command.Id} not found");
+            throw new KeyNotFoundException($"Product with ID {command.Id} not found");
 
         return _mapper.Map<GetProductResult>(user);
     }

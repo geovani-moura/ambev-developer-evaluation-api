@@ -105,12 +105,7 @@ public class ProductsController : BaseController
         var command = _mapper.Map<GetProductCommand>(request.Id);
         var result = await _mediator.Send(command, cancellationToken);
 
-        return Ok(new ApiResponseWithData<GetProductResponse>
-        {
-            Success = true,
-            Message = "Product retrieved successfully",
-            Data = _mapper.Map<GetProductResponse>(result)
-        });
+        return Ok(_mapper.Map<GetProductResponse>(result));
     }
 
     /// <summary>
@@ -162,12 +157,7 @@ public class ProductsController : BaseController
         if (result is null)
             return NotFound(new ApiResponse { Success = false, Message = "Product not found" });
 
-        return Ok(new ApiResponseWithData<UpdateProductResponse>
-        {
-            Success = true,
-            Message = "Product updated successfully",
-            Data = _mapper.Map<UpdateProductResponse>(result)
-        });
+        return Ok(_mapper.Map<UpdateProductResponse>(result));
     }
 
     /// <summary>
@@ -212,12 +202,7 @@ public class ProductsController : BaseController
         var command = new GetCategoriesCommand();
         var result = await _mediator.Send(command, cancellationToken);
 
-        return Ok(new ApiResponseWithData<GetCategoriesResponse>
-        {
-            Success = true,
-            Message = "Categories retrieved successfully",
-            Data = _mapper.Map<GetCategoriesResponse>(result)
-        });
+        return Ok(_mapper.Map<GetCategoriesResponse>(result));
     }
 
     /// <summary>
@@ -254,11 +239,6 @@ public class ProductsController : BaseController
         var command = _mapper.Map<GetByCategoryCommand>(request);
         var result = await _mediator.Send(command, cancellationToken);
 
-        return Ok(new ApiResponseWithData<GetByCategoryResponse>
-        {
-            Success = true,
-            Message = "Products by category retrieved successfully",
-            Data = _mapper.Map<GetByCategoryResponse>(result)
-        });
+        return Ok(_mapper.Map<GetByCategoryResponse>(result));
     }
 }

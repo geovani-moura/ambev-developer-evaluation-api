@@ -12,6 +12,7 @@ public class GetProductProfile : Profile
                 .ConstructUsing(id => new GetProductCommand(id));
 
         // Aplication -> WebApi
+        CreateMap<GetProductRatingResult, GetProductRatingResponse>();
         CreateMap<GetProductResult, GetProductResponse>();
     }
 }

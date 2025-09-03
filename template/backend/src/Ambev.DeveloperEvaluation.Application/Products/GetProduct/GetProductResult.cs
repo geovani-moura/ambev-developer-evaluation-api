@@ -1,6 +1,4 @@
-﻿using Ambev.DeveloperEvaluation.Application.Products.Common;
-
-namespace Ambev.DeveloperEvaluation.Application.Products.GetProduct;
+﻿namespace Ambev.DeveloperEvaluation.Application.Products.GetProduct;
 
 public class GetProductResult
 {
@@ -11,5 +9,5 @@ public class GetProductResult
     public string Category { get; set; } = string.Empty;
     public string Image { get; set; } = string.Empty;
 
-    public RatingResult Rating { get; set; } = new();
+    public GetProductRatingResult Rating { get; set; } = new();
 }

@@ -1,9 +1,11 @@
 ﻿using Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
 using Ambev.DeveloperEvaluation.Application.Sales.DeleteSale;
+using Ambev.DeveloperEvaluation.Application.Sales.GetSale;
 using Ambev.DeveloperEvaluation.Application.Sales.ListSales;
 using Ambev.DeveloperEvaluation.WebApi.Common;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.CreateSale;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.DeleteSale;
+using Ambev.DeveloperEvaluation.WebApi.Features.Sales.GetSale;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.ListSales;
 using AutoMapper;
 using MediatR;
@@ -95,8 +97,31 @@ public class SalesController : BaseController
         var deleted = await _mediator.Send(command, cancellationToken);
 
         if (!deleted.Success)
-            return NotFound(new ApiResponse { Success = false, Message = "Product not found" });
+            return NotFound(new ApiResponse { Success = false, Message = "Sale not found" });
 
-        return Ok(new ApiResponse { Success = true, Message = "Product deleted successfully" });
+        return Ok(new ApiResponse { Success = true, Message = "Sale deleted successfully" });
+    }
+
+    /// <summary>
+    /// Recupera uma venda pelo seu identificador.
+    /// </summary>
+    /// <param name="id">ID único do Sale.</param>
+    /// <param name="cancellationToken">Token de cancelamento.</param>
+    /// <returns>Venda encontrada, ou erro caso não exista.</returns>
+    [HttpGet("{id:guid}")]
+    [ProducesResponseType(typeof(ApiResponseWithData<GetSaleResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetSale([FromRoute] Guid id, CancellationToken cancellationToken)
+    {
+        var request = new GetSaleRequest { Id = id };
+        var validator = new GetSaleRequestValidator();
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        if (!validationResult.IsValid) return BadRequest(validationResult.Errors);
+
+        var command = _mapper.Map<GetSaleCommand>(request.Id);
+        var result = await _mediator.Send(command, cancellationToken);
+
+        return Ok(_mapper.Map<GetSaleResponse>(result));
     }
 }

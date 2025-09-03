@@ -6,6 +6,7 @@ public class GetProductRequestValidator : AbstractValidator<GetProductRequest>
 {
     public GetProductRequestValidator()
     {
-        RuleFor(x => x.Id).NotEmpty();
+        RuleFor(x => x.Id)
+            .NotEmpty();
     }
 }
