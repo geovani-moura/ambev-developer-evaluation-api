@@ -1,12 +1,14 @@
 ﻿using FluentValidation;
 
-namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
+namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.UpdateSale;
 
-public class CreateSaleCommandValidator : AbstractValidator<CreateSaleCommand>
+public class UpdateSaleRequestValidator : AbstractValidator<UpdateSaleRequest>
 {
-    public CreateSaleCommandValidator()
+    public UpdateSaleRequestValidator()
     {
-        // Data obrigatória
+        RuleFor(x => x.Id)
+            .NotEmpty().WithMessage("Sale ID is required.");
+
         RuleFor(x => x.Date)
             .NotEmpty().WithMessage("Sale date is required.");
 
@@ -19,7 +21,7 @@ public class CreateSaleCommandValidator : AbstractValidator<CreateSaleCommand>
 
         RuleFor(x => x.CustomerEmail)
             .NotEmpty().WithMessage("Customer email is required.")
-            .EmailAddress().WithMessage("Invalid customer email.");
+            .EmailAddress().WithMessage("Invalid email format.");
 
         RuleFor(x => x.CustomerPhone)
             .NotEmpty().WithMessage("Customer phone is required.");
@@ -30,15 +32,15 @@ public class CreateSaleCommandValidator : AbstractValidator<CreateSaleCommand>
 
         // Itens
         RuleFor(x => x.Items)
-            .NotEmpty().WithMessage("Sale must have at least one item.");
+            .NotEmpty().WithMessage("At least one item must be provided.");
 
-        RuleForEach(x => x.Items).SetValidator(new CreateSaleItemDtoValidator());
+        RuleForEach(x => x.Items).SetValidator(new UpdateSaleItemRequestValidator());
     }
 }
 
-public class CreateSaleItemDtoValidator : AbstractValidator<CreateSaleItemDto>
+public class UpdateSaleItemRequestValidator : AbstractValidator<UpdateSaleItemRequest>
 {
-    public CreateSaleItemDtoValidator()
+    public UpdateSaleItemRequestValidator()
     {
         RuleFor(x => x.ProductId)
             .NotEmpty().WithMessage("Product ID is required.");

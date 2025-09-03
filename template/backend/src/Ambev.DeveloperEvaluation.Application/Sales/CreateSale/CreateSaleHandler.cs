@@ -25,6 +25,17 @@ public class CreateSaleHandler : IRequestHandler<CreateSaleCommand, CreateSaleRe
             throw new ValidationException(validationResult.Errors);
 
         var sale = _mapper.Map<Sale>(request);
+        foreach (var item in request.Items)
+        {
+            sale.AddItem(
+                item.ProductId,
+                item.ProductTitle,
+                item.ProductCategory,
+                item.Quantity,
+                item.UnitPrice
+            );
+        }
+
         var saleResult = await _repository.CreateAsync(sale, cancellationToken);
         return _mapper.Map<CreateSaleResult>(saleResult);
     }

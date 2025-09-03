@@ -16,7 +16,7 @@ public class Sale
     public decimal TotalAmount { get; private set; }
     public bool IsCancelled { get; private set; }
 
-    public List<SaleItem> Items { get; set; } = new();
+    public List<SaleItem> Items { get; set; } = [];
 
     public void AddItem(Guid productId, string productTitle, string productCategory, int quantity, decimal unitPrice)
     {

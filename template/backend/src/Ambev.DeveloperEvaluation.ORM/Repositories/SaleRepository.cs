@@ -31,18 +31,69 @@ public class SaleRepository : ISaleRepository
 
     public async Task<Sale?> UpdateAsync(Sale sale, CancellationToken cancellationToken = default)
     {
-        var existing = await GetByIdAsync(sale.Id, cancellationToken);
+        var existing = await _context.Sales
+            .Include(s => s.Items)
+            .FirstOrDefaultAsync(s => s.Id == sale.Id, cancellationToken);
+
         if (existing == null) return null;
 
-        _context.Entry(existing).CurrentValues.SetValues(sale);
+        // Atualiza cabeçalho
+        existing.Date = sale.Date;
+        existing.CustomerId = sale.CustomerId;
+        existing.CustomerName = sale.CustomerName;
+        existing.CustomerEmail = sale.CustomerEmail;
+        existing.CustomerPhone = sale.CustomerPhone;
+        existing.Branch = sale.Branch;
 
-        existing.Items.Clear();
+        // Remove os que não vieram no update
+        var itemsToRemove = existing.Items
+            .Where(ei => sale.Items.All(ni => ni.Id != Guid.Empty && ni.Id != ei.Id))
+            .ToList();
+
+        foreach (var item in itemsToRemove)
+        {
+            existing.Items.Remove(item);
+        }
+
         foreach (var item in sale.Items)
-            existing.Items.Add(item);
+        {
+            var existingItem = existing.Items.FirstOrDefault(ei => ei.Id == item.Id);
+
+            if (existingItem != null)
+            {
+                // Atualiza campo a campo
+                existingItem.ProductId = item.ProductId;
+                existingItem.ProductTitle = item.ProductTitle;
+                existingItem.ProductCategory = item.ProductCategory;
+                existingItem.Quantity = item.Quantity;
+                existingItem.UnitPrice = item.UnitPrice;
+                existingItem.Discount = item.Discount;
+                existingItem.TotalAmount = item.TotalAmount;
+            }
+            else
+            {
+                // Insere novo
+                var newItem = new SaleItem
+                {
+                    Id = Guid.Empty,
+                    SaleId = existing.Id,
+                    ProductId = item.ProductId,
+                    ProductTitle = item.ProductTitle,
+                    ProductCategory = item.ProductCategory,
+                    Quantity = item.Quantity,
+                    UnitPrice = item.UnitPrice,
+                    Discount = item.Discount,
+                    TotalAmount = item.TotalAmount
+                };
+
+                existing.Items.Add(newItem);
+            }
+        }
 
         await _context.SaveChangesAsync(cancellationToken);
         return existing;
     }
+
 
     public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {

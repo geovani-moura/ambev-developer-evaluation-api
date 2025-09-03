@@ -1,27 +1,25 @@
-﻿namespace Ambev.DeveloperEvaluation.Application.Sales.ListSales;
+﻿namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.UpdateSale;
 
-public class ListSalesResult
-{
-    public List<ListSaleResult> Sales { get; set; } = [];
-    public int TotalItems { get; set; }
-    public int CurrentPage { get; set; }
-    public int TotalPages { get; set; }
-}
-
-public class ListSaleResult
+public class UpdateSaleResponse
 {
     public Guid Id { get; set; }
     public string SaleNumber { get; set; } = string.Empty;
     public DateTime Date { get; set; }
+
+    // Cliente (denormalizado)
+    public Guid CustomerId { get; set; }
     public string CustomerName { get; set; } = string.Empty;
     public string CustomerEmail { get; set; } = string.Empty;
+    public string CustomerPhone { get; set; } = string.Empty;
+
     public string Branch { get; set; } = string.Empty;
     public decimal TotalAmount { get; set; }
     public bool IsCancelled { get; set; }
-    public List<ListSaleItemResult> Items { get; set; } = [];
+
+    public List<SaleItemResponse> Items { get; set; } = [];
 }
 
-public class ListSaleItemResult
+public class SaleItemResponse
 {
     public Guid Id { get; set; }
     public Guid ProductId { get; set; }

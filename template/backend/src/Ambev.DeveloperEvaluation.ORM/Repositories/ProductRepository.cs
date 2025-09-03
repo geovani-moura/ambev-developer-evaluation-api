@@ -90,11 +90,11 @@ public class ProductRepository : IProductRepository
     }
 
     public async Task<PagedResult<Product>> ListByCategoryAsync(
-    string category,
-    int page,
-    int size,
-    string? order,
-    CancellationToken ct = default)
+        string category,
+        int page,
+        int size,
+        string? order,
+        CancellationToken ct = default)
     {
         // defesa básica
         if (string.IsNullOrWhiteSpace(category))
